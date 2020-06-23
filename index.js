@@ -9,7 +9,8 @@ const { clientId, clientSecret } = require('./config');
 const Start = () => {
 	console.clear();
 	console.log(chalk.red.bold('---===RP Client===---'));
-	console.log(chalk.red.bold('Crée par MrNossiom#4596'));
+	console.log(chalk.red.bold('Created by MrNossiom#4596'));
+	console.log(chalk.red(`Logged in to user: ${RPClient.user.username}`));
 	Menu();
 };
 
@@ -32,13 +33,13 @@ const CustomRPQuestionsFunc = async () => {
 	const CustomQuestions = [
 		{
 			type: 'input',
-			name: 'state',
-			message: chalk.blue('Set your state...'),
+			name: 'details',
+			message: chalk.blue('Set the details...'),
 		},
 		{
 			type: 'input',
-			name: 'details',
-			message: chalk.blue('Set the details...'),
+			name: 'state',
+			message: chalk.blue('Set your state...'),
 		},
 		{
 			type: 'input',
@@ -70,8 +71,8 @@ const CustomRPQuestionsFunc = async () => {
 
 	const CustomQuestionsAnswers = await inquirer.prompt(CustomQuestions);
 	const newCustomRPObj = {
-		state: CustomQuestionsAnswers.state,
 		details: CustomQuestionsAnswers.details,
+		state: CustomQuestionsAnswers.state,
 		largeImageKey: CustomQuestionsAnswers.largeImageKey,
 		largeImageText: CustomQuestionsAnswers.largeImageText,
 		smallImageKey: CustomQuestionsAnswers.smallImageKey,
@@ -105,8 +106,9 @@ const RichPresenceSnap = async (RPObj) => {
 		},
 	];
 	console.log(chalk.blue(`
-State: ${RPObj.state},
+${(RPClient.application) ? (RPClient.application.name) : 'MeTomT'}
 Details: ${RPObj.details},
+State: ${RPObj.state},
 Large Image Key: ${RPObj.largeImageKey},
 Large Image Text: ${RPObj.largeImageText},
 Small Image Key: ${RPObj.smallImageKey},

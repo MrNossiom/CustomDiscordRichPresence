@@ -14,4 +14,4 @@ To use this you need to create a Discord Application:
 3. And paste it into config.json.dist
 4. Rename config.json.dist to config.json
 5. Open terminal and run npm install
-6. Then run npm run rpc
+6. Then run `npm run rpc`

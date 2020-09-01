@@ -12,5 +12,3 @@ node_modules/
 #Config and private files...
 .vscode/
 .DS_Store
-config.json
-.eslintrc.json

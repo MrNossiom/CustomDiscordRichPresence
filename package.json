@@ -1,16 +1,29 @@
 {
-  "name": "waitroom",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "rpc": "node ."
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "chalk": "^4.1.0",
-    "discord-rpc": "^3.1.1",
-    "inquirer": "^7.2.0"
-  }
+	"name": "custom-rpc",
+	"version": "1.0.0",
+	"description": "",
+	"bin": "index.js",
+	"main": "index.js",
+	"scripts": {
+		"lint": "eslint .",
+		"rpc": "node ."
+	},
+	"author": "MrNossiom",
+	"license": "CECILL-B",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/MrNossiom/CustomDiscordRichPresence.git"
+	},
+	"bugs": {
+		"url": "https://github.com/MrNossiom/CustomDiscordRichPresence/issues"
+	},
+	"homepage": "https://github.com/MrNossiom/CustomDiscordRichPresence#readme",
+	"dependencies": {
+		"chalk": "^4.1.0",
+		"discord-rpc": "^3.1.1",
+		"inquirer": "^7.2.0"
+	},
+	"devDependencies": {
+		"eslint": "^7.8.0"
+	}
 }

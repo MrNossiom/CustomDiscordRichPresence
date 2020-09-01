@@ -1,35 +1,50 @@
+#!/usr/bin/env node
+
+'use strict';
+
+/* eslint-disable func-style */
+/* eslint-disable no-use-before-define */
 const RPC = require('discord-rpc');
 const { readFile, writeFile } = require('fs');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
-const { clientId, clientSecret } = require('./config');
+const { clientId: configClientId } = require('./config');
+const clientIdRegExp = /^\d{16,20}$/u;
 // Import
 
+const RPClient = new RPC.Client({ transport: 'ipc' });
+
+process.on('unhandledRejection', console.log);
+
 // User Questions Script
-const Start = () => {
+const start = () => {
 	console.clear();
 	console.log(chalk.red.bold('---===RP Client===---'));
 	console.log(chalk.red.bold('Created by MrNossiom#4596'));
 	console.log(chalk.red(`Logged in to user: ${RPClient.user.username}`));
-	Menu();
+	menu();
 };
 
-const Menu = async () => {
+const menu = async () => {
 	const MenuChoice = [
 		{
 			type: 'list',
 			name: 'mainMenu',
 			message: chalk.blue('Use Default or Custom Rich Presence'),
-			choices: ['Default Rich Presence', 'Custom Rich Presence'],
+			choices: [
+				'Default Rich Presence',
+				'Custom Rich Presence',
+			],
 		},
 	];
 
 	const MenuChoiceAnswer = await inquirer.prompt(MenuChoice);
-	if (MenuChoiceAnswer.mainMenu == 'Custom Rich Presence') CustomRPQuestionsFunc();
-	else if (MenuChoiceAnswer.mainMenu == 'Default Rich Presence') DefaultRPFunc();
+
+	if (MenuChoiceAnswer.mainMenu === 'Custom Rich Presence') customRPQuestionsFunc();
+	else if (MenuChoiceAnswer.mainMenu === 'Default Rich Presence') defaultRPFunc();
 };
 
-const CustomRPQuestionsFunc = async () => {
+const customRPQuestionsFunc = async () => {
 	const CustomQuestions = [
 		{
 			type: 'input',
@@ -65,7 +80,10 @@ const CustomRPQuestionsFunc = async () => {
 			type: 'list',
 			name: 'setDefault',
 			message: chalk.blue('Do you want to set this default ?'),
-			choices: ['Yes', 'No'],
+			choices: [
+				'Yes',
+				'No',
+			],
 		},
 	];
 
@@ -79,34 +97,39 @@ const CustomRPQuestionsFunc = async () => {
 		smallImageText: CustomQuestionsAnswers.smallImageText,
 	};
 
-	if (CustomQuestionsAnswers.setDefault == 'Yes') {
-		writeFile('./defaultRP.json', JSON.stringify(newCustomRPObj), err => {
+	if (CustomQuestionsAnswers.setDefault === 'Yes') {
+		writeFile('./defaultRP.json', JSON.stringify(newCustomRPObj), (err) => {
 			if (err) return console.log(err);
 		});
 	}
 
-	RichPresenceSnap(newCustomRPObj);
+	richPresenceSnap(newCustomRPObj);
 };
 
-const DefaultRPFunc = async () => {
+const defaultRPFunc = () => {
 	readFile('./defaultRP.json', 'utf8', (err, jsonString) => {
 		if (err) return console.log(err);
 		const defaultRP = JSON.parse(jsonString);
-		RichPresenceSnap(defaultRP);
+
+		richPresenceSnap(defaultRP);
 	});
 };
 
-const RichPresenceSnap = async (RPObj) => {
+const richPresenceSnap = async (RPObj) => {
 	const SetChoice = [
 		{
 			type: 'list',
 			name: 'activate',
 			message: chalk.blue('Do you want to activate your Rich Presence with the followings parameters ?'),
-			choices: ['Yes', 'No'],
+			choices: [
+				'Yes',
+				'No',
+			],
 		},
 	];
+
 	console.log(chalk.blue(`
-${(RPClient.application) ? (RPClient.application.name) : 'MeTomT'}
+${RPClient.application ? RPClient.application.name : 'MeTomT'}
 Details: ${RPObj.details},
 State: ${RPObj.state},
 Large Image Key: ${RPObj.largeImageKey},
@@ -115,8 +138,9 @@ Small Image Key: ${RPObj.smallImageKey},
 Small Image Text: ${RPObj.smallImageText}
 	`));
 	const SetChoiceAnswer = await inquirer.prompt(SetChoice);
-	if (SetChoiceAnswer.activate == 'Yes') setCustomRichPresence(RPObj);
-	else Start();
+
+	if (SetChoiceAnswer.activate === 'Yes') setCustomRichPresence(RPObj);
+	else start();
 };
 
 const startAgainFunc = async () => {
@@ -125,17 +149,19 @@ const startAgainFunc = async () => {
 			type: 'list',
 			name: 'next',
 			message: chalk.blue('Do you want to change again your discord Rich Presence ?'),
-			choices: ['Yes', 'No'],
+			choices: [
+				'Yes',
+				'No',
+			],
 		},
 	];
 	const startAgainAnswer = await inquirer.prompt(startAgain);
-	if (startAgainAnswer.next == 'Yes') Start();
+
+	if (startAgainAnswer.next === 'Yes') start();
 	else startAgainFunc();
 };
 
 // Set User RP
-const RPClient = new RPC.Client({ transport: 'ipc' });
-
 const setCustomRichPresence = (RPObj) => {
 	if (!RPObj.startTimestamp) RPObj.startTimestamp = Date.now();
 
@@ -147,6 +173,46 @@ const setCustomRichPresence = (RPObj) => {
 	startAgainFunc();
 };
 
+// Get Client ID
+const clientIdPrompt = async () => {
+	const ClientIDAsk = [
+		{
+			type: 'input',
+			name: 'clientId',
+			message: chalk.blue('I need a Client ID...'),
+		},
+	];
+
+	const ClientIDAnswer = await inquirer.prompt(ClientIDAsk);
+
+	if (ClientIDAnswer.clientId && Boolean(ClientIDAnswer.clientId.match(clientIdRegExp))) return ClientIDAnswer.clientId;
+
+	return new Error('No Correct Client ID provided...');
+};
+
+let clientId;
+const clientIdProcess = async () => {
+	const argument = process.argv[3] || process.argv[2];
+
+	if (argument && Boolean(argument.match(clientIdRegExp))) clientId = argument;
+	else if (configClientId && Boolean(configClientId.match(clientIdRegExp))) clientId = configClientId;
+	else clientId = await clientIdPrompt();
+	if (clientId.match(clientIdRegExp)) {
+		writeFile('./config.json', JSON.stringify({ clientId }), (err) => {
+			if (err) return console.log(err);
+		});
+
+		login();
+	} else {
+		console.log('Something wrong happend...');
+	}
+};
+
 // Login
-RPClient.login({ clientId: clientId, clientSecret: clientSecret });
-RPClient.on('ready', () => Start());
+const login = () => {
+	RPClient.login({ clientId });
+	RPClient.on('ready', () => start());
+};
+
+// Start
+clientIdProcess();

@@ -1,5 +1,5 @@
-# CustomDiscordRichPresence
-A Custom Discord Rich Presence Script in NodeJS
+# Custom Discord Rich Presence for npx use. 
+Better use with `npx`...
 
 To use this you need to create a Discord Application:
 
@@ -11,7 +11,9 @@ To use this you need to create a Discord Application:
 
 ![Image 2](https://github.com/MrNossiom/CustomDiscordRichPresence/blob/master/imgs/2.png)
 
-3. And paste it into config.json.dist
-4. Rename config.json.dist to config.json
-5. Open terminal and run npm install
-6. Then run `npm run rpc`
+3. Then run `npx CustomDiscordRPC [your token first time]`
+
+For any problem, please create an issue...
+If needed the file where the program store the token is `./config.json`
+
+For this program to work you a discord instance must be open on your computer...

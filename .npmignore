@@ -1,0 +1,5 @@
+.vscode/
+imgs/
+node_modules/
+.eslint.json
+.gitignore

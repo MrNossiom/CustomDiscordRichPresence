@@ -1,12 +1,12 @@
 {
 	"name": "custom-rpc",
-	"version": "1.0.1",
-	"description": "",
+	"version": "1.0.3",
+	"description": "A custom Rich Presence Client for discord...",
 	"bin": "index.js",
 	"main": "index.js",
 	"scripts": {
-		"lint": "eslint .",
-		"rpc": "node ."
+		"start": "node .",
+		"lint": "eslint ."
 	},
 	"author": "MrNossiom",
 	"license": "CECILL-B",

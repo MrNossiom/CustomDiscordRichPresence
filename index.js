@@ -9,6 +9,7 @@ const { readFile, writeFile } = require('fs');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 const { clientId: configClientId } = require('./config');
+const path = require('path');
 const clientIdRegExp = /^\d{16,20}$/u;
 // Import
 
@@ -98,7 +99,7 @@ const customRPQuestionsFunc = async () => {
 	};
 
 	if (CustomQuestionsAnswers.setDefault === 'Yes') {
-		writeFile('./defaultRP.json', JSON.stringify(newCustomRPObj), (err) => {
+		writeFile(path.join(__dirname, './defaultRP.json'), JSON.stringify(newCustomRPObj), (err) => {
 			if (err) return console.log(err);
 		});
 	}
@@ -107,7 +108,7 @@ const customRPQuestionsFunc = async () => {
 };
 
 const defaultRPFunc = () => {
-	readFile('./defaultRP.json', 'utf8', (err, jsonString) => {
+	readFile(path.join(__dirname, './defaultRP.json'), 'utf8', (err, jsonString) => {
 		if (err) return console.log(err);
 		const defaultRP = JSON.parse(jsonString);
 
@@ -185,26 +186,26 @@ const clientIdPrompt = async () => {
 
 	const ClientIDAnswer = await inquirer.prompt(ClientIDAsk);
 
-	if (ClientIDAnswer.clientId && Boolean(ClientIDAnswer.clientId.match(clientIdRegExp))) return ClientIDAnswer.clientId;
-
-	return new Error('No Correct Client ID provided...');
+	return ClientIDAnswer.clientId;
 };
 
 let clientId;
 const clientIdProcess = async () => {
 	const argument = process.argv[3] || process.argv[2];
 
-	if (argument && Boolean(argument.match(clientIdRegExp))) clientId = argument;
-	else if (configClientId && Boolean(configClientId.match(clientIdRegExp))) clientId = configClientId;
+	if (argument && argument.match(clientIdRegExp)) clientId = argument;
+	else if (configClientId && configClientId.match(clientIdRegExp)) clientId = configClientId;
 	else clientId = await clientIdPrompt();
-	if (clientId.match(clientIdRegExp)) {
-		writeFile('./config.json', JSON.stringify({ clientId }), (err) => {
+	if (clientId && clientId.match(clientIdRegExp)) {
+		writeFile(path.join(__dirname, './config.json'), JSON.stringify({ clientId }), (err) => {
 			if (err) return console.log(err);
 		});
 
 		login();
 	} else {
-		console.log('Something wrong happend...');
+		console.log('No correct Client ID Provided');
+		// eslint-disable-next-line no-process-exit
+		process.exit(0);
 	}
 };
 

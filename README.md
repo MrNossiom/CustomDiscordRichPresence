@@ -1,7 +1,7 @@
 # Custom Discord Rich Presence for cli use. 
 
 ###### For this program to work you a Discord instance must be open on your computer...
-##### For global installation please do a 777 recursive chmod to `/usr/local/lib/node_modules/custom-rpc/` Command for UNIX: `sudo chmod -R 777 /usr/local/lib/node_modules/custom-rpc/`
+##### For global installation please do a 777 recursive chmod to `/usr/local/lib/node_modules/custom-discord-rp/` Command for UNIX: `sudo chmod -R 777 /usr/local/lib/node_modules/custom-discord-rp/`
 
 The first time you give a token, he is placed in a `./config.json` file at the project root folder.
 

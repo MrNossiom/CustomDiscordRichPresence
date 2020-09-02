@@ -1,6 +1,6 @@
 {
 	"name": "custom-discord-rp",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"description": "A custom Rich Presence Client for discord...",
 	"main": "src/index.js",
 	"bin": {

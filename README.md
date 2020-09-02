@@ -1,19 +1,31 @@
-# Custom Discord Rich Presence for npx use. 
-Better use with `npx`...
+# Custom Discord Rich Presence for cli use. 
 
-To use this you need to create a Discord Application:
+###### For this program to work you a Discord instance must be open on your computer...
+##### For global installation please do a 777 recursive chmod to `/usr/local/lib/node_modules/custom-rpc/` Command for UNIX: `sudo chmod -R 777 /usr/local/lib/node_modules/custom-rpc/`
 
-1. For this go to [Discord Devlopper Portal](https://discord.com/developers/applications/)
+The first time you give a token, he is placed in a `./config.json` file at the project root folder.
 
-![Image 1](https://github.com/MrNossiom/CustomDiscordRichPresence/blob/master/imgs/1.png)
+---
+
+###### To use this cli project you need to have a Client ID and to preimport assets.
+### How to get a Client ID:
+
+ - For this you need to go to the [Discord Devlopper Portal](https://discord.com/developers/applications/), login with a discord account and create a new application.
 	
-2. Copy the client ID and the Client Secret:
+ - Copy the Client ID:
 
-![Image 2](https://github.com/MrNossiom/CustomDiscordRichPresence/blob/master/imgs/2.png)
+ - Then run `npx custom-drp`
 
-3. Then run `npx CustomDiscordRPC [your token first time]`
+### How to import assets:
+
+ - Go to the [Discord Devlopper Portal](https://discord.com/developers/applications/)
+
+ - In the application you've created, select Rich Presence and then Art Assets...
+
+ - You can now import photos and give them an asset key that you will use to select your photo in the `custom-drp` cli project.
+
+---
 
 For any problem, please create an issue...
-If needed the file where the program store the token is `./config.json`
 
-For this program to work you a discord instance must be open on your computer...
+This project is maintened by: @MrNossiom

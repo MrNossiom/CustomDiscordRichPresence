@@ -12,3 +12,4 @@ node_modules/
 #Config and private files...
 .vscode/
 .DS_Store
+config.dist.json

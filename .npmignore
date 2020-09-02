@@ -3,3 +3,4 @@ imgs/
 node_modules/
 .eslint.json
 .gitignore
+TODO.md

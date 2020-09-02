@@ -1,9 +1,11 @@
 {
-	"name": "custom-rpc",
-	"version": "1.0.3",
+	"name": "custom-discord-rp",
+	"version": "1.0.4",
 	"description": "A custom Rich Presence Client for discord...",
-	"bin": "index.js",
-	"main": "index.js",
+	"main": "src/index.js",
+	"bin": {
+		"custom-drp": "src/index.js"
+	},
 	"scripts": {
 		"start": "node .",
 		"lint": "eslint ."
@@ -12,12 +14,12 @@
 	"license": "CECILL-B",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/MrNossiom/CustomDiscordRichPresence.git"
+		"url": "git+https://github.com/MrNossiom/custom-discord-rp.git"
 	},
 	"bugs": {
-		"url": "https://github.com/MrNossiom/CustomDiscordRichPresence/issues"
+		"url": "https://github.com/MrNossiom/custom-discord-rp/issues"
 	},
-	"homepage": "https://github.com/MrNossiom/CustomDiscordRichPresence#readme",
+	"homepage": "https://github.com/MrNossiom/custom-discord-rp#readme",
 	"dependencies": {
 		"chalk": "^4.1.0",
 		"discord-rpc": "^3.1.1",

@@ -100,14 +100,14 @@ const customRPQuestionsFunc = async () => {
 			name: 'details',
 			message: chalk.blue('Set the details...'),
 			default: config.details,
-			validate: (input) => { if (input.length < 2) return 'The input must be more that 2 carather long'; return true; },
+			validate: (input) => { if (input.length < 2) return 'The input must be more that 2 characters long'; return true; },
 		},
 		{
 			type: 'input',
 			name: 'state',
 			message: chalk.blue('Set your state...'),
 			default: config.state,
-			validate: (input) => { if (input.length < 2) return 'The input must be more that 2 carather long'; return true; },
+			validate: (input) => { if (input.length < 2) return 'The input must be more that 2 characters long'; return true; },
 		},
 		{
 			type: 'input',

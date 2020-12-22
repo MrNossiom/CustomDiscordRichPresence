@@ -3,7 +3,7 @@
 'use strict';
 
 const RPC = require('discord-rpc');
-const configmanager = require('./configmanager');
+const configManager = require('./configManager');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 const { clientId: configClientId } = require('./config');
@@ -38,7 +38,7 @@ const clientIdProcess = async () => {
 	else if (configClientId && configClientId.match(clientIdRegExp)) clientId = configClientId;
 	else clientId = await clientIdPrompt();
 	if (clientId && clientId.match(clientIdRegExp)) {
-		configmanager('set', { clientId });
+		configManager('set', { clientId });
 
 		login();
 	} else {
@@ -77,14 +77,14 @@ const menu = async () => {
 
 	if (MenuChoiceAnswer.mainMenu === 'Custom Rich Presence') customRPQuestionsFunc();
 	else if (MenuChoiceAnswer.mainMenu === 'Default Rich Presence') defaultRPFunc();
-	else if (MenuChoiceAnswer.mainMenu === 'Change Client ID') clientIdReask();
+	else if (MenuChoiceAnswer.mainMenu === 'Change Client ID') clientIdReAsk();
 };
 
-const clientIdReask = async () => {
+const clientIdReAsk = async () => {
 	const newClientId = await clientIdPrompt();
 
 	if (newClientId && newClientId.match(clientIdRegExp)) {
-		configmanager('set', { clientId: newClientId });
+		configManager('set', { clientId: newClientId });
 		console.log(chalk.green(`Changed to: ${newClientId}`));
 	} else {
 		console.log(chalk.redBright('No correct Client ID Provided'));
@@ -93,7 +93,7 @@ const clientIdReask = async () => {
 };
 
 const customRPQuestionsFunc = async () => {
-	const config = await configmanager('get');
+	const config = await configManager('get');
 	const CustomQuestions = [
 		{
 			type: 'input',
@@ -155,14 +155,14 @@ const customRPQuestionsFunc = async () => {
 	};
 
 	if (CustomQuestionsAnswers.setDefault === 'Yes') {
-		configmanager('set', newCustomRPObj);
+		configManager('set', newCustomRPObj);
 	}
 
 	richPresenceSnap(newCustomRPObj);
 };
 
 const defaultRPFunc = async () => {
-	const options = await configmanager('get');
+	const options = await configManager('get');
 
 	richPresenceSnap(options);
 };

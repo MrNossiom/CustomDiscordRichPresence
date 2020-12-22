@@ -1,38 +1,38 @@
 {
-  "name": "custom-discord-rp",
-  "version": "1.0.8",
-  "description": "A custom Rich Presence Client for discord...",
-  "main": "src/index.js",
-  "bin": {
-    "custom-drp": "src/index.js"
-  },
-  "dependencies": {
-    "chalk": "^4.1.0",
-    "discord-rpc": "^3.1.4",
-    "inquirer": "^7.3.3"
-  },
-  "devDependencies": {
-    "eslint": "^7.9.0"
-  },
-  "scripts": {
-    "start": "node .",
-    "lint": "eslint ."
-  },
-  "author": "MrNossiom",
-  "license": "CECILL-B",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MrNossiom/custom-discord-rp.git"
-  },
-  "bugs": {
-    "url": "https://github.com/MrNossiom/custom-discord-rp/issues"
-  },
-  "homepage": "https://github.com/MrNossiom/custom-discord-rp#readme",
-  "keywords": [
-    "discord",
-    "discord-rpc",
-    "cli",
-    "custom-rp",
-    "rp"
-  ]
+	"name": "custom-discord-rp",
+	"version": "1.0.9",
+	"description": "A custom Rich Presence Client for discord...",
+	"main": "src/index.js",
+	"bin": {
+		"custom-drp": "src/index.js"
+	},
+	"dependencies": {
+		"chalk": "^4.1.0",
+		"discord-rpc": "^3.1.4",
+		"inquirer": "^7.3.3"
+	},
+	"devDependencies": {
+		"eslint": "^7.16.0"
+	},
+	"scripts": {
+		"start": "node .",
+		"lint": "eslint ."
+	},
+	"author": "MrNossiom",
+	"license": "CECILL-B",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/MrNossiom/custom-discord-rp.git"
+	},
+	"bugs": {
+		"url": "https://github.com/MrNossiom/custom-discord-rp/issues"
+	},
+	"homepage": "https://github.com/MrNossiom/custom-discord-rp#readme",
+	"keywords": [
+		"discord",
+		"discord-rpc",
+		"cli",
+		"custom-rp",
+		"rp"
+	]
 }

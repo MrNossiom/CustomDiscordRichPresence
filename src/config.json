@@ -1,9 +1,9 @@
 {
-    "clientId": "Your Client ID Here",
-    "details": "Details",
-    "state": "State",
-    "largeImageKey": "First Image Key",
-    "largeImageText": "First Image Text",
-    "smallImageKey": "Small Image Key",
-    "smallImageText": "Small Image Text"
+	"clientId": "Your Client ID Here",
+	"details": "Details",
+	"state": "State",
+	"largeImageKey": "First Image Key",
+	"largeImageText": "First Image Text",
+	"smallImageKey": "Small Image Key",
+	"smallImageText": "Small Image Text"
 }

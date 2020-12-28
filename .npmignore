@@ -1,6 +1,5 @@
+.github/
 .vscode/
-imgs/
 node_modules/
-.eslint.json
+.eslintrc.json
 .gitignore
-TODO.md

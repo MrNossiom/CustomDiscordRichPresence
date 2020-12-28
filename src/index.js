@@ -2,30 +2,37 @@
 
 'use strict';
 
+/* eslint-disable no-use-before-define */
+
+// Discord RPC
 const RPC = require('discord-rpc');
-const configManager = require('./configManager');
+
+// CLI
 const chalk = require('chalk');
 const inquirer = require('inquirer');
+
+// Modules
+const questions = require('./questions');
+
+// Config
+const ConfigManager = require('./ConfigManager');
 const { clientId: configClientId } = require('./config');
+
+// RexExp
 const clientIdRegExp = /^\d{18}$/u;
-// Import
 
+// Initialization
 const RPClient = new RPC.Client({ transport: 'ipc' });
+const config = new ConfigManager();
 
-process.on('unhandledRejection', console.log);
+process.on('unhandledRejection', (message) => {
+	if (process.env.NODE_ENV === 'production') return;
+	console.log(message);
+});
 
 // Get Client ID
 const clientIdPrompt = async () => {
-	const ClientIDAsk = [
-		{
-			type: 'input',
-			name: 'clientId',
-			message: chalk.blue('I need a Client ID...'),
-			validate: (input) => { if (!input.match(clientIdRegExp)) return 'No Correct Client ID Provided'; return true; },
-		},
-	];
-
-	const ClientIDAnswer = await inquirer.prompt(ClientIDAsk);
+	const ClientIDAnswer = await inquirer.prompt(questions.clientId);
 
 	return ClientIDAnswer.clientId;
 };
@@ -38,7 +45,7 @@ const clientIdProcess = async () => {
 	else if (configClientId && configClientId.match(clientIdRegExp)) clientId = configClientId;
 	else clientId = await clientIdPrompt();
 	if (clientId && clientId.match(clientIdRegExp)) {
-		configManager('set', { clientId });
+		config.current = { clientId };
 
 		login();
 	} else {
@@ -60,20 +67,7 @@ const start = () => {
 };
 
 const menu = async () => {
-	const MenuChoice = [
-		{
-			type: 'list',
-			name: 'mainMenu',
-			message: chalk.blue('Use Default or Custom Rich Presence'),
-			choices: [
-				'Default Rich Presence',
-				'Custom Rich Presence',
-				'Change Client ID',
-			],
-		},
-	];
-
-	const MenuChoiceAnswer = await inquirer.prompt(MenuChoice);
+	const MenuChoiceAnswer = await inquirer.prompt(questions.menuChoice);
 
 	if (MenuChoiceAnswer.mainMenu === 'Custom Rich Presence') customRPQuestionsFunc();
 	else if (MenuChoiceAnswer.mainMenu === 'Default Rich Presence') defaultRPFunc();
@@ -84,7 +78,7 @@ const clientIdReAsk = async () => {
 	const newClientId = await clientIdPrompt();
 
 	if (newClientId && newClientId.match(clientIdRegExp)) {
-		configManager('set', { clientId: newClientId });
+		config.current = { clientId: newClientId };
 		console.log(chalk.green(`Changed to: ${newClientId}`));
 	} else {
 		console.log(chalk.redBright('No correct Client ID Provided'));
@@ -93,58 +87,7 @@ const clientIdReAsk = async () => {
 };
 
 const customRPQuestionsFunc = async () => {
-	const config = await configManager('get');
-	const CustomQuestions = [
-		{
-			type: 'input',
-			name: 'details',
-			message: chalk.blue('Set the details...'),
-			default: config.details,
-			validate: (input) => { if (input.length < 2) return 'The input must be more that 2 characters long'; return true; },
-		},
-		{
-			type: 'input',
-			name: 'state',
-			message: chalk.blue('Set your state...'),
-			default: config.state,
-			validate: (input) => { if (input.length < 2) return 'The input must be more that 2 characters long'; return true; },
-		},
-		{
-			type: 'input',
-			name: 'largeImageKey',
-			message: chalk.blue('Set the Large Image Key...'),
-			default: config.largeImageKey,
-		},
-		{
-			type: 'input',
-			name: 'largeImageText',
-			message: chalk.blue('Set the Large Image Text...'),
-			default: config.largeImageText,
-		},
-		{
-			type: 'input',
-			name: 'smallImageKey',
-			message: chalk.blue('Set the Small Image Key'),
-			default: config.smallImageKey,
-		},
-		{
-			type: 'input',
-			name: 'smallImageText',
-			message: chalk.blue('Set the Small Image Text'),
-			default: config.smallImageText,
-		},
-		{
-			type: 'list',
-			name: 'setDefault',
-			message: chalk.blue('Do you want to set this default ?'),
-			choices: [
-				'Yes',
-				'No',
-			],
-		},
-	];
-
-	const CustomQuestionsAnswers = await inquirer.prompt(CustomQuestions);
+	const CustomQuestionsAnswers = await inquirer.prompt(await questions.customQuestions());
 	const newCustomRPObj = {
 		details: CustomQuestionsAnswers.details,
 		state: CustomQuestionsAnswers.state,
@@ -155,31 +98,19 @@ const customRPQuestionsFunc = async () => {
 	};
 
 	if (CustomQuestionsAnswers.setDefault === 'Yes') {
-		configManager('set', newCustomRPObj);
+		config.current = newCustomRPObj;
 	}
 
 	richPresenceSnap(newCustomRPObj);
 };
 
-const defaultRPFunc = async () => {
-	const options = await configManager('get');
+const defaultRPFunc = () => {
+	const options = config.current;
 
 	richPresenceSnap(options);
 };
 
 const richPresenceSnap = async (RPObj) => {
-	const SetChoice = [
-		{
-			type: 'list',
-			name: 'activate',
-			message: chalk.blue('Do you want to activate your Rich Presence with the followings parameters ?'),
-			choices: [
-				'Yes',
-				'No',
-			],
-		},
-	];
-
 	console.log(chalk.blue(`
 ${RPClient.application ? RPClient.application.name : 'MeTomT'}
 Details: ${RPObj.details},
@@ -189,26 +120,14 @@ Large Image Text: ${RPObj.largeImageText},
 Small Image Key: ${RPObj.smallImageKey},
 Small Image Text: ${RPObj.smallImageText}
 	`));
-	const SetChoiceAnswer = await inquirer.prompt(SetChoice);
+	const SetChoiceAnswer = await inquirer.prompt(questions.setChoice);
 
 	if (SetChoiceAnswer.activate === 'Yes') setCustomRichPresence(RPObj);
 	else start();
 };
 
 const startAgainFunc = async () => {
-	const startAgain = [
-		{
-			type: 'list',
-			name: 'next',
-			message: chalk.blue('Do you want to return to the menu ?'),
-			choices: [
-				'Yes',
-				'No',
-				'Quit',
-			],
-		},
-	];
-	const startAgainAnswer = await inquirer.prompt(startAgain);
+	const startAgainAnswer = await inquirer.prompt(questions.startAgain);
 
 	if (startAgainAnswer.next === 'Yes') start();
 	else if (startAgainAnswer.next === 'Quit') process.exit(0);

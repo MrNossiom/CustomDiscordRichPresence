@@ -1,6 +1,26 @@
-.vscode/
-imgs/
+# Dependencies
 node_modules/
-.eslint.json
+
+# Production
+build/
+
+# Misc
+.DS_Store
+.vscode
 .gitignore
-TODO.md
+
+# Cache
+.netlify/
+.vercel/
+.next/
+.eslintcache
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Secrets
+.env
+.env.prod
+.env.local

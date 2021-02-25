@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-use-before-define */
 
 'use strict';
 
@@ -21,7 +22,12 @@ const clientIdPrompt = async () => {
 			type: 'input',
 			name: 'clientId',
 			message: chalk.blue('I need a Client ID...'),
-			validate: (input) => { if (!input.match(clientIdRegExp)) return 'No Correct Client ID Provided'; return true; },
+			validate: (input) => {
+				if (!input.match(clientIdRegExp))
+					return 'No Correct Client ID Provided';
+
+				return true;
+			},
 		},
 	];
 
@@ -35,7 +41,8 @@ const clientIdProcess = async () => {
 	const argument = process.argv[3] || process.argv[2];
 
 	if (argument && argument.match(clientIdRegExp)) clientId = argument;
-	else if (configClientId && configClientId.match(clientIdRegExp)) clientId = configClientId;
+	else if (configClientId && configClientId.match(clientIdRegExp))
+		clientId = configClientId;
 	else clientId = await clientIdPrompt();
 	if (clientId && clientId.match(clientIdRegExp)) {
 		configManager('set', { clientId });
@@ -43,6 +50,7 @@ const clientIdProcess = async () => {
 		login();
 	} else {
 		console.log('No correct Client ID Provided');
+		// eslint-disable-next-line no-process-exit
 		process.exit(0);
 	}
 };
@@ -52,7 +60,11 @@ const start = () => {
 	console.clear();
 	console.log(chalk.red.bold('---===RP Client===---'));
 	console.log(chalk.red.bold('Created by MrNossiom#4596'));
-	console.log(chalk.red('More information on https://github.com/MrNossiom/custom-discord-rp#readme'));
+	console.log(
+		chalk.red(
+			'More information on https://github.com/MrNossiom/custom-discord-rp#readme'
+		)
+	);
 	console.log(chalk.red(`Logged in with Client ID: ${clientId}`));
 	console.log(chalk.red(`Logged in to user: ${RPClient.user.username}`));
 
@@ -75,8 +87,10 @@ const menu = async () => {
 
 	const MenuChoiceAnswer = await inquirer.prompt(MenuChoice);
 
-	if (MenuChoiceAnswer.mainMenu === 'Custom Rich Presence') customRPQuestionsFunc();
-	else if (MenuChoiceAnswer.mainMenu === 'Default Rich Presence') defaultRPFunc();
+	if (MenuChoiceAnswer.mainMenu === 'Custom Rich Presence')
+		customRPQuestionsFunc();
+	else if (MenuChoiceAnswer.mainMenu === 'Default Rich Presence')
+		defaultRPFunc();
 	else if (MenuChoiceAnswer.mainMenu === 'Change Client ID') clientIdReAsk();
 };
 
@@ -100,14 +114,24 @@ const customRPQuestionsFunc = async () => {
 			name: 'details',
 			message: chalk.blue('Set the details...'),
 			default: config.details,
-			validate: (input) => { if (input.length < 2) return 'The input must be more that 2 characters long'; return true; },
+			validate: (input) => {
+				if (input.length < 2)
+					return 'The input must be more that 2 characters long';
+
+				return true;
+			},
 		},
 		{
 			type: 'input',
 			name: 'state',
 			message: chalk.blue('Set your state...'),
 			default: config.state,
-			validate: (input) => { if (input.length < 2) return 'The input must be more that 2 characters long'; return true; },
+			validate: (input) => {
+				if (input.length < 2)
+					return 'The input must be more that 2 characters long';
+
+				return true;
+			},
 		},
 		{
 			type: 'input',
@@ -137,10 +161,7 @@ const customRPQuestionsFunc = async () => {
 			type: 'list',
 			name: 'setDefault',
 			message: chalk.blue('Do you want to set this default ?'),
-			choices: [
-				'Yes',
-				'No',
-			],
+			choices: ['Yes', 'No'],
 		},
 	];
 
@@ -172,15 +193,15 @@ const richPresenceSnap = async (RPObj) => {
 		{
 			type: 'list',
 			name: 'activate',
-			message: chalk.blue('Do you want to activate your Rich Presence with the followings parameters ?'),
-			choices: [
-				'Yes',
-				'No',
-			],
+			message: chalk.blue(
+				'Do you want to activate your Rich Presence with the followings parameters ?'
+			),
+			choices: ['Yes', 'No'],
 		},
 	];
 
-	console.log(chalk.blue(`
+	console.log(
+		chalk.blue(`
 ${RPClient.application ? RPClient.application.name : 'MeTomT'}
 Details: ${RPObj.details},
 State: ${RPObj.state},
@@ -188,7 +209,8 @@ Large Image Key: ${RPObj.largeImageKey},
 Large Image Text: ${RPObj.largeImageText},
 Small Image Key: ${RPObj.smallImageKey},
 Small Image Text: ${RPObj.smallImageText}
-	`));
+	`)
+	);
 	const SetChoiceAnswer = await inquirer.prompt(SetChoice);
 
 	if (SetChoiceAnswer.activate === 'Yes') setCustomRichPresence(RPObj);
@@ -201,11 +223,7 @@ const startAgainFunc = async () => {
 			type: 'list',
 			name: 'next',
 			message: chalk.blue('Do you want to return to the menu ?'),
-			choices: [
-				'Yes',
-				'No',
-				'Quit',
-			],
+			choices: ['Yes', 'No', 'Quit'],
 		},
 	];
 	const startAgainAnswer = await inquirer.prompt(startAgain);
